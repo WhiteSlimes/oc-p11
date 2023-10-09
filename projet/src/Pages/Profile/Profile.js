@@ -1,8 +1,18 @@
-import React from "react"
+import React, { useEffect } from "react"
 import User from "../../Components/User/User"
 import Account from "../../Components/Account/Account"
+import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom";
 
 function Profile(){
+    const token = useSelector((state) => state.auth.token);
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if(!token){
+            navigate('/login')
+        }
+    }, [token, navigate])
     return(
         <div className="main bg-dark">
             <User />

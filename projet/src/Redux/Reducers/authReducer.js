@@ -1,9 +1,15 @@
 const initialState = {
     token: '', //Valeur de départ du token d'authentification
 }
-const authentificationReducer = (state = initialState, action) => {
+
+export const loginSuccess = (token) => ({
+    type: 'LOGIN_SUCCESS',
+    payload: token,
+  });
+  
+const authReducer = (state = initialState, action) => {
     switch(action.type){
-        case 'LOGIN': // Action de connexion
+        case 'LOGIN_SUCESS': // Action de connexion
             return{
                 ...state,
                 token: action.payload.token, // Met à jour la valeur du token
@@ -15,4 +21,4 @@ const authentificationReducer = (state = initialState, action) => {
     }
 }
 
-export default authentificationReducer
+export default authReducer
