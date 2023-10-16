@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import "./LoginStyle.css"
+import { loginSuccess } from "../../Redux/Reducers/authReducer";
 
 function Login(){
     const dispatch = useDispatch()
@@ -41,12 +42,7 @@ function Login(){
                 setError("Invalid username or password")
                 return
             }else{
-                dispatch({
-                    type: 'LOGIN',
-                    playload: {
-                        token: data.body.token,
-                    }
-                })
+                dispatch(loginSuccess(data.body.token))
                 navigate('/profile')
             }
         })
