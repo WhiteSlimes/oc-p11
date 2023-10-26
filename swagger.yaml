@@ -33,6 +33,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
   /user/signup:
     post:
       tags:
@@ -57,6 +58,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
   /user/profile:
     post:
       security:
@@ -65,11 +67,9 @@ paths:
         - User Module
       summary: User Profile API
       description: API for fetching a user profile
-      #produces:
-       # - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -94,13 +94,85 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile updated successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
+  /transactions:
+    get:
+      tags:
+        - Transaction Module
+      summary: Récupérer toutes les transactions du mois en cours
+      description: Récupère toutes les transactions groupées par compte pour le mois en cours.
+      responses:
+        '200':
+          description: Succès. Retourne la liste des transactions.
+        '404':
+          description: Aucune transaction trouvée
+
+    post:
+      tags:
+        - Transaction Module
+      summary: Ajouter une nouvelle transaction
+      description: Ajoute une nouvelle transaction.
+      parameters:
+        - in: body
+          name: body
+          description: Données de la transaction à ajouter
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Succès. La transaction a été ajoutée.
+        '400':
+          description: Données de transaction invalides
+  /transactions/{transactionId}:
+    get:
+      tags:
+        - Transaction Module
+      summary: Récupérer les détails d'une transaction
+      description: Récupère les détails d'une transaction spécifique.
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID de la transaction à récupérer
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Succès. Retourne les détails de la transaction.
+        '404':
+          description: Transaction non trouvée.
+    put:
+      tags:
+        - Transaction Module
+      summary: Mettre à jour une transaction existante
+      description: Met à jour les informations d'une transaction spécifique.
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID de la transaction à mettre à jour
+          required: true
+          type: integer
+      requestBody:
+        description: Nouvelles données de la transaction
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Transaction'
+      responses:
+        '200':
+          description: Succès. La transaction a été mise à jour.
+        '400':
+          description: Données de transaction invalides
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -155,4 +227,16 @@ definitions:
     type: object
     properties:
       userName:
+        type: string
+
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: integer
+      account:
+        type: string
+      amount:
+        type: number
+      date:
         type: string
